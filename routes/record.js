@@ -5,16 +5,30 @@ const ObjectId = require("mongodb").ObjectId;
 const data = require("../data")
 
 //get All records
-recordRoutes.route("/record").get(function(req, res){
-    let db_connect = dbo.getDB("records");
-    db_connect
+// recordRoutes.route("/record").get(function(req, res){
+//     let db_connect = dbo.getDB("records");
+//     db_connect
+//         .collection("records")
+//         .find({})
+//         .toArray(function(err, result) {
+//             if(err) throw err
+//             res.json(result)
+//         })
+// })
+recordRoutes.route("/record").get(async function (req, response) {
+    let db_connect = dbo.getDB();
+  
+    try {
+      const records = await db_connect
         .collection("records")
         .find({})
-        .toArray(function(err, result) {
-            if(err) throw err
-            res.json(result)
-        })
-})
+        .toArray();
+      response.json(records);
+    } catch (e) {
+      console.log("An error occurred pulling the records. " + e);
+    }
+  
+  });
 
 //get all statistics records
 recordRoutes.route("/record/stats").get(function(req, res){
@@ -52,25 +66,30 @@ recordRoutes.route("/record/:name").get(function(req, res){
 // create a new record
 recordRoutes.route("/record/add").post(function(req, res){
     let db_connect = dbo.getDB();
-    let totalAmount = req.body.balance + totalAmount;
+    let totalAmount = 0;
+    totalAmount = req.body.balance + totalAmount;
     let newObj = {
-      surname: req.body.surname,
-      name: req.body.name,
-      dateOfBirth: req.body.dateOfBirth,
-      school: req.body.school,
-      level: req.body.level,
-      street: req.body.street,
-      postalCode: req.body.postalCode,
-      city: req.body.city,
-      contact1: req.body.contact1,
-      tel1: req.body.tel1,
-      parentSSN: req.body.parentSSN,
-      parentDOB: req.body.parentDOB,
+      childName: req.body.surname,
+      childFamilieName: req.body.name,
+      childDateOfBirth: req.body.dateOfBirth,
+      childSchool: req.body.school,
+      childLevel: req.body.level,
+      childGender: req.body.gender,
       childSSN: req.body.childSSN,
-      contact2: req.body.contact2,
-      tel2: req.body.tel2,
-      email: req.body.email,
-      allergies: req.body.allergies,
+      childPassport: req.body.childPassport,
+      childAllergies: req.body.allergies,
+      streetAndHouseNumber: req.body.street,
+      postalCodeAndCity: req.body.postalCodeAndCity,
+      parentName1: req.body.parentName1,
+      parentFamilieName1: req.body.parentFamilieName1,
+      parentTel1: req.body.parentTel1,
+      parentEmail1: req.body.parentEmail1,
+      parentSSN1: req.body.parentSSN1,
+      parentName2: req.body.parentName2,
+      parentFamilieName2: req.body.parentFamilieName2,
+      parentTel2: req.body.parentTel2,
+      parentEmail2: req.body.parentEmail2,
+      parentSSN2: req.body.parentSSN2,
       medicals: req.body.medicals,
       parentRemarks: req.body.parentRemarks,
       teamRemarks: req.body.teamRemarks,
@@ -96,7 +115,7 @@ recordRoutes.route("/record/add").post(function(req, res){
 recordRoutes.route("/record/stats/add").post(function(req, res){
     let db_connect = dbo.getDB()
     let newObj = {
-      name: req.body.name,
+      childName: req.body.name,
       balance: req.body.balance,
       social: req.body.social,
       date: req.body.date,
@@ -113,34 +132,38 @@ recordRoutes.route("/update/:id").put(function(req, res){
     let myQuery = { _id:ObjectId( req.params.id ) };
     let newValues = {
       $set: {
-        surname: req.body.surname,
-        name: req.body.name,
-        dateOfBirth: req.body.dateOfBirth,
-        school: req.body.school,
-        level: req.body.level,
-        street: req.body.street,
-        postalCode: req.body.postalCode,
-        city: req.body.city,
-        contact1: req.body.contact1,
-        tel1: req.body.tel1,
-        contact2: req.body.contact2,
-        tel2: req.body.tel2,
-        parentSSN: req.body.parentSSN,
-        parentDOB: req.body.parentDOB,
-        childSSN: req.body.childSSN,
-        email: req.body.email,
-        allergies: req.body.allergies,
-        medicals: req.body.medicals,
-        parentRemarks: req.body.parentRemarks,
-        teamRemarks: req.body.teamRemarks,
-        week1: req.body.week1,
-        week2: req.body.week2,
-        week3: req.body.week3,
-        week4: req.body.week4,
-        presence: req.body.presence,
-        balance: req.body.balance,
-        social: req.body.social,
-        totalAmount: req.body.totalAmount,
+        childName: req.body.surname,
+      childFamilieName: req.body.name,
+      childDateOfBirth: req.body.dateOfBirth,
+      childSchool: req.body.school,
+      childLevel: req.body.level,
+      childGender: req.body.gender,
+      childSSN: req.body.childSSN,
+      childPassport: req.body.childPassport,
+      childAllergies: req.body.allergies,
+      streetAndHouseNumber: req.body.street,
+      postalCodeAndCity: req.body.postalCodeAndCity,
+      parentName1: req.body.parentName1,
+      parentFamilieName1: req.body.parentFamilieName1,
+      parentTel1: req.body.parentTel1,
+      parentEmail1: req.body.parentEmail1,
+      parentSSN1: req.body.parentSSN1,
+      parentName2: req.body.parentName2,
+      parentFamilieName2: req.body.parentFamilieName2,
+      parentTel2: req.body.parentTel2,
+      parentEmail2: req.body.parentEmail2,
+      parentSSN2: req.body.parentSSN2,
+      medicals: req.body.medicals,
+      parentRemarks: req.body.parentRemarks,
+      teamRemarks: req.body.teamRemarks,
+      week1: req.body.week1,
+      week2: req.body.week2,
+      week3: req.body.week3,
+      week4: req.body.week4,
+      presence: req.body.presence,
+      balance: req.body.balance,
+      social: req.body.social,
+      totalAmount: totalAmount,
       },
     };
     db_connect

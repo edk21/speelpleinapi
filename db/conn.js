@@ -1,25 +1,26 @@
 const { MongoClient } = require("mongodb");
 const Db = process.env.ATLAS_URI;
 const client = new MongoClient(Db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-var _db;
+let _db;
 
 module.exports = {
-    connectToServer: (callback) => {
-        client.connect((err, db) => {
-            //we verify if we have the db
-            if(db){
-                _db = db.db("speelpleinapi");
-                console.log("Connected To MongoDB")
-            }
-            return callback(err);
-        });
-    },
+  connectToServer: async function (callback) {
 
-    getDB: function () {
-        return _db;
-    },
+    try {
+      await client.connect();
+    } catch (e) {
+      console.error(e);
+    }
+
+    _db = client.db("mySecondDatabase");
+
+    return (_db === undefined ? false : true);
+  },
+  getDB: function () {
+    return _db;
+  },
 };
