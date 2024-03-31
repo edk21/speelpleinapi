@@ -42,7 +42,7 @@ recordRoutes.route("/record/stats").get(function(req, res){
 // get a singl record by ID
 recordRoutes.route("/record/:id").get(function(req, res){
     let db_connect = dbo.getDB();
-    let myQuery = { _id: ObjectId( req.params.id ) };
+    let myQuery = { _id: new ObjectId( req.params.id ) };
     db_connect
         .collection("records")
         .findOne(myQuery, function(err, result){
@@ -129,7 +129,7 @@ recordRoutes.route("/record/stats/add").post(function(req, res){
 // update a record
 recordRoutes.route("/update/:id").put(function(req, res){
     let db_connect = dbo.getDB();
-    let myQuery = { _id:ObjectId( req.params.id ) };
+    let myQuery = { _id: new ObjectId( req.params.id ) };
     let newValues = {
       $set: {
         childName: req.body.childName,
@@ -178,7 +178,7 @@ recordRoutes.route("/update/:id").put(function(req, res){
 // delete a record
 recordRoutes.route("/:id").delete(function(req, res) {
     let db_connect = dbo.getDB();
-    let myQuery = { _id: ObjectId( req.params.id ) };
+    let myQuery = { _id: new ObjectId( req.params.id ) };
     db_connect
         .collection("records")
         .deleteOne(myQuery, function(err, result){
@@ -190,7 +190,7 @@ recordRoutes.route("/:id").delete(function(req, res) {
 // delete a daily registration
 recordRoutes.route('/record/deleteAStat/:id').delete(function(req, res){
     let db_connect = dbo.getDB();
-    let myQuery = { _id: ObjectId( req.params.id )};
+    let myQuery = { _id: new ObjectId( req.params.id )};
     db_connect.collection("statDatas").deleteOne(myQuery, function(err, result){
         if(err) throw err
         res.json(result)
