@@ -7,12 +7,12 @@ const PORT = process.env.PORT || 3002;
 
 app.use(cors());
 app.use(express.json());
-app.use(require("../routes/record"));
+app.use(require("./routes/record"));
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 //get driver conenction
-const dbo = require("../db/conn");
+const dbo = require("./db/conn");
 
 app.listen(PORT, () => {
     dbo.connectToServer(function(err){
