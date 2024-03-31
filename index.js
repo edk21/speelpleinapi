@@ -9,8 +9,6 @@ app.use(cors());
 app.use(express.json());
 app.use(require("./routes/record"));
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
-
 //get driver conenction
 const dbo = require("./db/conn");
 
@@ -69,7 +67,7 @@ const html = `
   </head>
   <body>
     <section>
-      Hello from Render!
+      Hello from My Speelplein backend On Render!
     </section>
   </body>
 </html>
